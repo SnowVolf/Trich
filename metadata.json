@@ -1,0 +1,6 @@
+{
+  "name": "Два.ч Клиент",
+  "description": "Клиент для имиджборда 2ch.hk на Jetpack Compose, поддерживающий потоки, историю, черновики и решение emoji капчи.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

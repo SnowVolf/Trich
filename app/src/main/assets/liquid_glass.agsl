@@ -1,0 +1,37 @@
+uniform float2 resolution;
+uniform float time;
+uniform half4 colorStart;
+uniform half4 colorEnd;
+
+float rand(float2 n) { 
+	return fract(sin(dot(n, float2(12.9898, 4.1414))) * 43758.5453);
+}
+
+half4 main(in float2 fragCoord) {
+    float2 uv = fragCoord / resolution;
+    
+    // Static frosted noise texture
+    float staticNoise = rand(uv * 100.0) * 0.04;
+    
+    // Very subtle iridescent / slow shifting reflection
+    float slowTime = time * 0.2;
+    float2 refractedUv = uv;
+    refractedUv.x += sin(uv.y * 3.0 + slowTime) * 0.05;
+    
+    half4 color = mix(colorStart, colorEnd, half(uv.y + staticNoise));
+    
+    // Sharp diagonal Apple-like glare
+    float diagonal = uv.x + uv.y;
+    // creating a sharp glare band
+    float glare = smoothstep(0.9, 1.0, sin(diagonal * 3.1415 + slowTime)) * 0.15;
+    float glare2 = smoothstep(0.95, 1.0, sin(diagonal * 8.0 - slowTime)) * 0.05;
+    
+    // Soft vignette or edge thickness
+    float distToCenter = distance(uv, float2(0.5, 0.5));
+    float edgeThickness = smoothstep(0.3, 0.5, distToCenter) * 0.1;
+    
+    color.rgb += glare + glare2 + edgeThickness + staticNoise;
+    color.a = 0.85; // Apple glass is mostly opaque but lets light through
+    
+    return half4(color.rgb * color.a, color.a);
+}

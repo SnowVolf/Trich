@@ -38,6 +38,10 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import com.example.worker.WorkManagerHelper
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settingsViewModel: SettingsViewModel = koinViewModel()
             val state by settingsViewModel.state.collectAsState()
+            
+            val context = LocalContext.current
+            LaunchedEffect(state.backgroundCheckFavorites) {
+                WorkManagerHelper.scheduleFavoritesWorker(context, state.backgroundCheckFavorites)
+            }
             
             MyApplicationTheme(
                 darkTheme = state.isDarkTheme,
@@ -86,8 +95,10 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
                     if (threadMatch != null) {
                         val board = threadMatch.groupValues[1]
                         val thread = threadMatch.groupValues[2].toIntOrNull()
+                        val uri = android.net.Uri.parse(url)
+                        val scrollToPost = uri.getQueryParameter("scrollToPost")?.toIntOrNull()
                         if (thread != null) {
-                            navigator.navigate(ThreadDest(board, thread))
+                            navigator.navigate(ThreadDest(board, thread, scrollToPost))
                         }
                     } else if (boardMatch != null) {
                         val board = boardMatch.groupValues[1]
@@ -177,6 +188,7 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
             ThreadScreen(
                 board = dest.board,
                 threadNum = dest.threadNum,
+                scrollToPost = dest.scrollToPost,
                 onBackClick = { navigator.goBack() },
                 onBoardsClick = { navigator.navigate(Boards) },
                 onHistoryClick = { navigator.navigate(History) },

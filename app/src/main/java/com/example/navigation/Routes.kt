@@ -19,7 +19,7 @@ data object Settings : NavKey
 data object Favorites : NavKey
 
 @Serializable
-data class ThreadDest(val board: String, val threadNum: Int) : NavKey
+data class ThreadDest(val board: String, val threadNum: Int, val scrollToPost: Int? = null) : NavKey
 
 @Serializable
 data class ThreadListDest(val board: String) : NavKey

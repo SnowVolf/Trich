@@ -87,6 +87,28 @@ fun SettingsScreen(
                     checked = state.isDarkTheme,
                     onCheckedChange = { viewModel.toggleTheme() }
                 )
+
+                Spacer(modifier = Modifier.height(24.dp))
+                
+                val permissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+                    contract = androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+                ) { isGranted: Boolean ->
+                    if (isGranted || android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
+                        viewModel.toggleBackgroundCheckFavorites()
+                    }
+                }
+                
+                SettingsSwitch(
+                    title = "Фоновая проверка новых постов",
+                    checked = state.backgroundCheckFavorites,
+                    onCheckedChange = { 
+                        if (!state.backgroundCheckFavorites && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                            permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                        } else {
+                            viewModel.toggleBackgroundCheckFavorites()
+                        }
+                    }
+                )
                 
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(stringResource(R.string.settings_font_size, state.fontSize), style = MaterialTheme.typography.titleMedium)

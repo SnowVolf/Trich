@@ -50,6 +50,115 @@ import androidx.compose.ui.unit.sp
 
 import androidx.compose.ui.res.stringResource
 import com.example.R
+import android.graphics.RuntimeShader
+import android.os.Build
+import androidx.compose.animation.core.withInfiniteAnimationFrameMillis
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.produceState
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.platform.LocalContext
+
+@Composable
+fun Modifier.appleGlassButtonBackground(): Modifier = composed {
+    val context = LocalContext.current
+    val shaderString by produceState<String?>(initialValue = null) {
+        value = try {
+            context.assets.open("liquid_glass.agsl").bufferedReader().use { it.readText() }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    val colorStart = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f)
+    val colorEnd = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f)
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && shaderString != null) {
+        val runtimeShader = remember(shaderString) { RuntimeShader(shaderString!!) }
+        val shaderBrush = remember(runtimeShader) { ShaderBrush(runtimeShader) }
+        
+        var time by remember { mutableStateOf(0f) }
+        
+        LaunchedEffect(Unit) {
+            val startTime = withInfiniteAnimationFrameMillis { it }
+            while (true) {
+                time = (withInfiniteAnimationFrameMillis { it } - startTime) / 1000f
+            }
+        }
+
+        this.drawBehind {
+            runtimeShader.setFloatUniform("resolution", size.width, size.height)
+            runtimeShader.setFloatUniform("time", time)
+            runtimeShader.setFloatUniform("colorStart", colorStart.red, colorStart.green, colorStart.blue, colorStart.alpha)
+            runtimeShader.setFloatUniform("colorEnd", colorEnd.red, colorEnd.green, colorEnd.blue, colorEnd.alpha)
+            drawRect(brush = shaderBrush)
+        }
+    } else {
+        this.background(MaterialTheme.colorScheme.surfaceContainerHighest)
+    }
+}
+
+@Composable
+fun SearchToolbar(
+    modifier: Modifier = Modifier,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    onCloseClick: () -> Unit
+) {
+    val statusBarPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    
+    val gradient = Brush.verticalGradient(
+        colors = listOf(MaterialTheme.colorScheme.background.copy(alpha = 0.95f), MaterialTheme.colorScheme.background.copy(alpha = 0.7f), Color.Transparent)
+    )
+
+    Row(
+        modifier = modifier
+            .background(gradient)
+            .fillMaxWidth()
+            .padding(top = statusBarPadding + 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        FloatingButton(icon = Icons.AutoMirrored.Filled.ArrowBack, onClick = onCloseClick)
+        
+        Surface(
+            modifier = Modifier
+                .weight(1f)
+                .height(48.dp)
+                .appleGlassButtonBackground(),
+            shape = CircleShape,
+            color = Color.Transparent,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        ) {
+            androidx.compose.foundation.text.BasicTextField(
+                value = searchQuery,
+                onValueChange = onSearchQueryChange,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp, vertical = 14.dp),
+                textStyle = androidx.compose.ui.text.TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium
+                ),
+                singleLine = true,
+                cursorBrush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.primary),
+                decorationBox = { innerTextField ->
+                    if (searchQuery.isEmpty()) {
+                        Text(
+                            text = "Поиск по треду...",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    innerTextField()
+                }
+            )
+        }
+    }
+}
 
 @Composable
 fun FloatingToolbar(
@@ -89,10 +198,11 @@ fun FloatingToolbar(
         Surface(
             modifier = Modifier
                 .weight(1f)
-                .height(48.dp),
+                .height(48.dp)
+                .appleGlassButtonBackground(),
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.surfaceContainerHighest,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            color = Color.Transparent,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Row(
@@ -170,10 +280,11 @@ fun FloatingButton(
         modifier = Modifier
             .size(48.dp)
             .clip(CircleShape)
+            .appleGlassButtonBackground()
             .clickable { onClick() },
         shape = CircleShape,
-        color = MaterialTheme.colorScheme.surfaceContainerHighest,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        color = Color.Transparent,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(

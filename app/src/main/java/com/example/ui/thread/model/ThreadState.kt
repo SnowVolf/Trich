@@ -17,5 +17,15 @@ data class ThreadState(
     val threadTitle: String = "",
     val isFavorite: Boolean = false,
     val bumpLimit: Int = 500,
-    val captchaState: CaptchaState = CaptchaState.Hidden
-)
+    val captchaState: CaptchaState = CaptchaState.Hidden,
+    val searchQuery: String = "",
+    val isSearchActive: Boolean = false,
+    val hasNewPosts: Boolean = false,
+    val newPostsCount: Int = 0,
+    val pendingPosts: List<Post>? = null
+) {
+    val filteredPosts: List<Post>
+        get() = if (!isSearchActive || searchQuery.isBlank()) posts else posts.filter {
+            it.comment.contains(searchQuery, ignoreCase = true) || it.num.toString().contains(searchQuery)
+        }
+}

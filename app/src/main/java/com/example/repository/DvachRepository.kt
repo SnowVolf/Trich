@@ -131,7 +131,17 @@ class DvachRepository(
         favoriteThreadDao.isFavorite("${board}_$threadNum")
     }
 
-    suspend fun toggleFavorite(board: String, threadNum: Int, title: String): Boolean = withContext(Dispatchers.IO) {
+    suspend fun updateFavoritePostsCount(board: String, threadNum: Int, count: Int) = withContext(Dispatchers.IO) {
+        val id = "${board}_$threadNum"
+        if (favoriteThreadDao.isFavorite(id)) {
+            val fav = favoriteThreadDao.getAll().find { it.id == id }
+            if (fav != null) {
+                favoriteThreadDao.insertOrUpdate(fav.copy(lastKnownPostsCount = count))
+            }
+        }
+    }
+
+    suspend fun toggleFavorite(board: String, threadNum: Int, title: String, postsCount: Int = 0): Boolean = withContext(Dispatchers.IO) {
         val id = "${board}_$threadNum"
         if (favoriteThreadDao.isFavorite(id)) {
             favoriteThreadDao.deleteById(id)
@@ -143,7 +153,8 @@ class DvachRepository(
                     board = board,
                     threadNum = threadNum,
                     title = title,
-                    addedDate = System.currentTimeMillis()
+                    addedDate = System.currentTimeMillis(),
+                    lastKnownPostsCount = postsCount
                 )
             )
             true

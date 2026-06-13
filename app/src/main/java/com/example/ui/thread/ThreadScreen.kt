@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +52,8 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import com.example.ui.shared.FloatingButton
 
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
@@ -59,6 +62,7 @@ import androidx.compose.material3.Icon
 fun ThreadScreen(
     board: String,
     threadNum: Int,
+    scrollToPost: Int? = null,
     onBackClick: () -> Unit,
     onBoardsClick: () -> Unit,
     onHistoryClick: () -> Unit,
@@ -70,9 +74,22 @@ fun ThreadScreen(
     viewModel: ThreadViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+    var hasScrolledToTarget by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
 
     LaunchedEffect(board, threadNum) {
         viewModel.load(board, threadNum)
+    }
+
+    LaunchedEffect(state.posts, scrollToPost) {
+        if (!hasScrolledToTarget && scrollToPost != null && state.posts.isNotEmpty()) {
+            // Find index of the target post
+            val targetIndex = scrollToPost - 1
+            if (targetIndex in state.posts.indices) {
+                listState.animateScrollToItem(targetIndex)
+                hasScrolledToTarget = true
+            }
+        }
     }
 
     DisposableEffect(Unit) {
@@ -83,25 +100,37 @@ fun ThreadScreen(
 
     Scaffold(
         topBar = {
-            FloatingToolbar(
-                title = state.threadTitle.ifBlank { stringResource(R.string.thread_title, threadNum) },
-                onBackClick = onBackClick,
-                customDropdownItems = { closeMenu ->
-                    androidx.compose.material3.DropdownMenuItem(
-                        text = { Text("Доска /$board/") },
-                        onClick = {
-                            closeMenu()
-                            onNavigateToBoard(board)
-                        }
-                    )
-                },
-                additionalActions = {
-                     FloatingButton(
-                         icon = if (state.isFavorite) androidx.compose.material.icons.Icons.Default.Favorite else androidx.compose.material.icons.Icons.Default.FavoriteBorder,
-                         onClick = { viewModel.toggleFavorite() }
-                     )
-                }
-            )
+            if (state.isSearchActive) {
+                com.example.ui.shared.SearchToolbar(
+                    searchQuery = state.searchQuery,
+                    onSearchQueryChange = { viewModel.updateSearchQuery(it) },
+                    onCloseClick = { viewModel.toggleSearch() }
+                )
+            } else {
+                FloatingToolbar(
+                    title = state.threadTitle.ifBlank { stringResource(R.string.thread_title, threadNum) },
+                    onBackClick = onBackClick,
+                    customDropdownItems = { closeMenu ->
+                        androidx.compose.material3.DropdownMenuItem(
+                            text = { Text("Доска /$board/") },
+                            onClick = {
+                                closeMenu()
+                                onNavigateToBoard(board)
+                            }
+                        )
+                    },
+                    additionalActions = {
+                         FloatingButton(
+                             icon = androidx.compose.material.icons.Icons.Default.Search,
+                             onClick = { viewModel.toggleSearch() }
+                         )
+                         FloatingButton(
+                             icon = if (state.isFavorite) androidx.compose.material.icons.Icons.Default.Favorite else androidx.compose.material.icons.Icons.Default.FavoriteBorder,
+                             onClick = { viewModel.toggleFavorite() }
+                         )
+                    }
+                )
+            }
         },
         bottomBar = {
             PostingBar(
@@ -122,6 +151,7 @@ fun ThreadScreen(
                 )
             } else {
                 LazyColumn(
+                    state = listState,
                     contentPadding = PaddingValues(
                         top = padding.calculateTopPadding() + 16.dp,
                         start = 16.dp, 
@@ -129,9 +159,11 @@ fun ThreadScreen(
                         bottom = padding.calculateBottomPadding() + 16.dp
                     )
                 ) {
-                    itemsIndexed(state.posts) { index, post ->
-                        val postIndexInThread = index + 1
-                        if (postIndexInThread == state.bumpLimit + 1) {
+                    val displayPosts = state.filteredPosts
+                    itemsIndexed(displayPosts) { displayIndex, post ->
+                        val originalIndex = state.posts.indexOf(post)
+                        val postIndexInThread = originalIndex + 1
+                        if (!state.isSearchActive && postIndexInThread == state.bumpLimit + 1) {
                             androidx.compose.foundation.layout.Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -154,7 +186,7 @@ fun ThreadScreen(
                                 )
                             }
                         }
-                        AnimatedAppearance(index = index) {
+                        AnimatedAppearance(index = displayIndex) {
                             PostCard(
                                 post = post,
                                 board = board,
@@ -163,10 +195,10 @@ fun ThreadScreen(
                             )
                         }
                     }
-                    if (state.posts.isNotEmpty()) {
+                    if (displayPosts.isNotEmpty()) {
                         item {
                             Spacer(modifier = Modifier.height(16.dp))
-                            AnimatedAppearance(index = state.posts.size) {
+                            AnimatedAppearance(index = displayPosts.size) {
                                 Button(
                                     onClick = { /* Show thread info */ },
                                     modifier = Modifier.fillMaxWidth().height(48.dp)
@@ -179,6 +211,23 @@ fun ThreadScreen(
                         }
                     }
                 }
+            }
+
+            androidx.compose.animation.AnimatedVisibility(
+                visible = state.hasNewPosts,
+                enter = androidx.compose.animation.fadeIn() + androidx.compose.animation.slideInVertically(initialOffsetY = { it }),
+                exit = androidx.compose.animation.fadeOut() + androidx.compose.animation.slideOutVertically(targetOffsetY = { it }),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = padding.calculateBottomPadding() + 16.dp)
+            ) {
+                androidx.compose.material3.ExtendedFloatingActionButton(
+                    onClick = { viewModel.loadNewPosts() },
+                    icon = { Icon(androidx.compose.material.icons.Icons.Default.Refresh, contentDescription = "Новые посты") },
+                    text = { Text("Есть новые посты (${state.newPostsCount})") },
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
         }
     }

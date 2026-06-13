@@ -24,7 +24,8 @@ data class FavoriteThread(
     val board: String,
     val threadNum: Int,
     val title: String,
-    val addedDate: Long
+    val addedDate: Long,
+    val lastKnownPostsCount: Int = 0
 )
 
 /**

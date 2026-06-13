@@ -41,4 +41,10 @@ class SettingsViewModel(private val repository: SettingsRepository) : ViewModel(
             repository.setFontSize(size)
         }
     }
+
+    fun toggleBackgroundCheckFavorites() {
+        viewModelScope.launch {
+            repository.setBackgroundCheckFavorites(!state.value.backgroundCheckFavorites)
+        }
+    }
 }

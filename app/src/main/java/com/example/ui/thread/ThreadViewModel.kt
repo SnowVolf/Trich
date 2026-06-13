@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.Job
 
 class ThreadViewModel(
     private val repository: DvachRepository
@@ -20,6 +23,7 @@ class ThreadViewModel(
     private var initialDraftLoaded = false
     private var currentBoard: String = ""
     private var currentThreadNum: Int = 0
+    private var pollingJob: Job? = null
 
     fun load(board: String, threadNum: Int) {
         if (currentBoard == board && currentThreadNum == threadNum && _state.value.posts.isNotEmpty()) return
@@ -43,7 +47,7 @@ class ThreadViewModel(
                 val op = _state.value.posts.first()
                 op.subject.ifBlank { op.comment.take(50) }
             } else "Тред $currentThreadNum"
-            val isFav = repository.toggleFavorite(currentBoard, currentThreadNum, title)
+            val isFav = repository.toggleFavorite(currentBoard, currentThreadNum, title, _state.value.posts.size)
             _state.value = _state.value.copy(isFavorite = isFav)
         }
     }
@@ -62,6 +66,8 @@ class ThreadViewModel(
                     op.subject.ifBlank { op.comment.take(50) }
                 } else "Тред $currentThreadNum"
                 _state.value = _state.value.copy(isLoading = false, posts = posts, threadTitle = title, bumpLimit = bumpLimit)
+                repository.updateFavoritePostsCount(currentBoard, currentThreadNum, posts.size)
+                startPolling()
             } catch (e: Exception) {
                 _state.value = _state.value.copy(isLoading = false, error = e.localizedMessage)
             }
@@ -80,6 +86,53 @@ class ThreadViewModel(
 
     fun updateDraftText(text: String) {
         _state.value = _state.value.copy(draftText = text)
+    }
+
+    fun updateSearchQuery(query: String) {
+        _state.value = _state.value.copy(searchQuery = query)
+    }
+
+    fun toggleSearch() {
+        _state.value = _state.value.copy(
+            isSearchActive = !_state.value.isSearchActive,
+            searchQuery = if (_state.value.isSearchActive) "" else _state.value.searchQuery
+        )
+    }
+
+    private fun startPolling() {
+        pollingJob?.cancel()
+        pollingJob = viewModelScope.launch {
+            while (isActive) {
+                delay(60_000)
+                try {
+                    val fetchedPosts = repository.getThreadPosts(currentBoard, currentThreadNum)
+                    val currentPostsCount = _state.value.posts.size
+                    if (fetchedPosts.size > currentPostsCount) {
+                        _state.value = _state.value.copy(
+                            hasNewPosts = true,
+                            newPostsCount = fetchedPosts.size - currentPostsCount,
+                            pendingPosts = fetchedPosts
+                        )
+                    }
+                } catch (e: Exception) {
+                    // Ignore polling errors
+                }
+            }
+        }
+    }
+
+    fun loadNewPosts() {
+        _state.value.pendingPosts?.let { pending ->
+            _state.value = _state.value.copy(
+                posts = pending,
+                hasNewPosts = false,
+                newPostsCount = 0,
+                pendingPosts = null
+            )
+            viewModelScope.launch {
+                repository.updateFavoritePostsCount(currentBoard, currentThreadNum, pending.size)
+            }
+        }
     }
 
     fun saveDraftOnExit() {
@@ -164,5 +217,10 @@ class ThreadViewModel(
                 _state.value = _state.value.copy(isLoading = false, error = "Ошибка отправки: ${e.localizedMessage}")
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        pollingJob?.cancel()
     }
 }

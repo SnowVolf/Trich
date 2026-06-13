@@ -18,13 +18,15 @@ class SettingsRepository(private val context: Context) {
     private val PASSCODE_ACTIVATED = booleanPreferencesKey("passcode_activated")
     private val IS_DARK_THEME = booleanPreferencesKey("is_dark_theme")
     private val FONT_SIZE = intPreferencesKey("font_size")
+    private val BACKGROUND_CHECK_FAVORITES = booleanPreferencesKey("background_check_favs")
 
     val settingsFlow: Flow<SettingsState> = context.dataStore.data.map { preferences ->
         SettingsState(
             passcode = preferences[PASSCODE] ?: "",
             passcodeActivated = preferences[PASSCODE_ACTIVATED] ?: false,
             isDarkTheme = preferences[IS_DARK_THEME] ?: true,
-            fontSize = preferences[FONT_SIZE] ?: 16
+            fontSize = preferences[FONT_SIZE] ?: 16,
+            backgroundCheckFavorites = preferences[BACKGROUND_CHECK_FAVORITES] ?: false
         )
     }
 
@@ -42,5 +44,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setFontSize(size: Int) {
         context.dataStore.edit { it[FONT_SIZE] = size }
+    }
+
+    suspend fun setBackgroundCheckFavorites(enabled: Boolean) {
+        context.dataStore.edit { it[BACKGROUND_CHECK_FAVORITES] = enabled }
     }
 }

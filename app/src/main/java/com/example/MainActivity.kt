@@ -16,6 +16,7 @@ import com.example.navigation.History
 import com.example.navigation.Favorites
 import com.example.navigation.NavigationState
 import com.example.navigation.Navigator
+import com.example.navigation.NewThreadDest
 import com.example.navigation.Settings
 import com.example.navigation.ThreadDest
 import com.example.navigation.ThreadListDest
@@ -26,9 +27,10 @@ import com.example.ui.drafts.DraftsScreen
 import com.example.ui.history.HistoryScreen
 import com.example.ui.favorites.FavoritesScreen
 import com.example.ui.settings.SettingsScreen
-import com.example.ui.theme.MyApplicationTheme
+import com.example.uikit.theme.MyApplicationTheme
 import com.example.ui.thread.ThreadScreen
 import com.example.ui.threadlist.ThreadListScreen
+import com.example.ui.newthread.NewThreadScreen
 import com.example.ui.settings.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.animation.core.tween
@@ -40,8 +42,13 @@ import androidx.compose.animation.togetherWith
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import com.example.navigation.GalleryDest
 import com.example.worker.WorkManagerHelper
 
+/**
+ * Главная точка входа в приложение (UI слой).
+ * Настраивает тему, DI (через Koin), навигацию и воркеры.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +79,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Определяет граф навигации для всего приложения и обрабатывает deeplinks/внешние интент-запросы.
+ * @param initialIntent Начальный Intent с которым было запущено Activity (для deeplink парсинга).
+ */
 @Composable
 fun AppNavigation(initialIntent: android.content.Intent?) {
     val navigationState = rememberNavigationState(
@@ -181,7 +192,14 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
                 onHistoryClick = { navigator.navigate(History) },
                 onDraftsClick = { navigator.navigate(Drafts) },
                 onFavoritesClick = { navigator.navigate(Favorites) },
-                onSettingsClick = { navigator.navigate(Settings) }
+                onSettingsClick = { navigator.navigate(Settings) },
+                onNewThreadClick = { board -> navigator.navigate(NewThreadDest(board)) }
+            )
+        }
+        entry<NewThreadDest> { dest ->
+            NewThreadScreen(
+                board = dest.board,
+                onBackClick = { navigator.goBack() }
             )
         }
         entry<ThreadDest> { dest ->
@@ -195,11 +213,11 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
                 onDraftsClick = { navigator.navigate(Drafts) },
                 onFavoritesClick = { navigator.navigate(Favorites) },
                 onSettingsClick = { navigator.navigate(Settings) },
-                onNavigateToGallery = { urls, index -> navigator.navigate(com.example.navigation.GalleryDest(urls, index)) },
+                onNavigateToGallery = { urls, index -> navigator.navigate(GalleryDest(urls, index)) },
                 onNavigateToBoard = { targetBoard -> navigator.navigate(ThreadListDest(targetBoard)) }
             )
         }
-        entry<com.example.navigation.GalleryDest> { dest ->
+        entry<GalleryDest> { dest ->
             com.example.ui.gallery.GalleryScreen(
                 urls = dest.urls,
                 initialIndex = dest.initialIndex,
@@ -215,8 +233,8 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
             val initialRoute = initialState.key
             val targetRoute = targetState.key
 
-            when {
-                initialRoute is ThreadListDest && targetRoute is ThreadDest -> {
+            when (initialRoute) {
+                is ThreadListDest if targetRoute is ThreadDest -> {
                     slideInHorizontally(
                         initialOffsetX = { it },
                         animationSpec = tween(400)
@@ -225,7 +243,8 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
                         animationSpec = tween(400)
                     )
                 }
-                initialRoute is ThreadDest && targetRoute is ThreadListDest -> {
+
+                is ThreadDest if targetRoute is ThreadListDest -> {
                     slideInHorizontally(
                         initialOffsetX = { -it / 3 },
                         animationSpec = tween(400)
@@ -234,7 +253,8 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
                         animationSpec = tween(400)
                     )
                 }
-                initialRoute is Boards && targetRoute is ThreadListDest -> {
+
+                is Boards if targetRoute is ThreadListDest -> {
                     slideInHorizontally(
                         initialOffsetX = { it },
                         animationSpec = tween(400)
@@ -243,7 +263,8 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
                         animationSpec = tween(400)
                     )
                 }
-                initialRoute is ThreadListDest && targetRoute is Boards -> {
+
+                is ThreadListDest if targetRoute is Boards -> {
                     slideInHorizontally(
                         initialOffsetX = { -it / 3 },
                         animationSpec = tween(400)
@@ -252,6 +273,7 @@ fun AppNavigation(initialIntent: android.content.Intent?) {
                         animationSpec = tween(400)
                     )
                 }
+
                 else -> {
                     fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
                 }

@@ -45,7 +45,7 @@ android {
       signingConfig = signingConfigs.getByName("release")
     }
     debug {
-      signingConfig = signingConfigs.getByName("debugConfig")
+      //signingConfig = signingConfigs.getByName("debugConfig")
     }
   }
   compileOptions {
@@ -69,6 +69,18 @@ secrets {
 // Some unused dependencies are commented out below instead of being removed.
 // This makes it easy to add them back in the future if needed.
 dependencies {
+  implementation(project(":feature:settings"))
+  implementation(project(":feature:history"))
+  implementation(project(":feature:drafts"))
+  implementation(project(":feature:favorites"))
+  implementation(project(":feature:gallery"))
+  implementation(project(":feature:threadlist"))
+  implementation(project(":feature:new-thread"))
+  implementation(project(":feature:thread"))
+  implementation(project(":feature:boards"))
+  implementation(project(":navigation"))
+  implementation(project(":data"))
+  implementation(project(":ui-kit"))
   implementation(platform(libs.androidx.compose.bom))
   implementation(platform(libs.firebase.bom))
   // implementation(libs.accompanist.permissions)
@@ -81,6 +93,7 @@ dependencies {
   implementation(libs.androidx.compose.material.icons.extended)
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.compose.ui)
+  implementation(libs.androidx.compose.ui.text.google.fonts)
   implementation(libs.androidx.compose.ui.graphics)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.core.ktx)
@@ -107,6 +120,8 @@ dependencies {
   implementation(libs.logging.interceptor)
 
   implementation(libs.okhttp)
+  debugImplementation(libs.chucker.debug)
+  releaseImplementation(libs.chucker.release)
   // implementation(libs.play.services.location)
   implementation(libs.retrofit)
   testImplementation(libs.androidx.compose.ui.test.junit4)

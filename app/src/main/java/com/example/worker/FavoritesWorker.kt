@@ -23,6 +23,10 @@ class FavoritesWorker(
 
     private val repository: DvachRepository by inject()
 
+    /**
+     * Основная логика работы воркера. Скачивает избранные треды и проверяет наличие новых постов.
+     * @return Result (успех или провал).
+     */
     override suspend fun doWork(): Result {
         return try {
             val favorites = repository.getFavorites()
@@ -50,6 +54,14 @@ class FavoritesWorker(
         }
     }
 
+    /**
+     * Отображает системное уведомление о появлении новых постов.
+     * @param board Код доски.
+     * @param threadNum Номер треда.
+     * @param title Заголовок треда.
+     * @param newCount Количество новых постов.
+     * @param targetPost Номер первого нового поста для скроллинга(не используется напрямую в Intent здесь).
+     */
     private fun showNotification(board: String, threadNum: Int, title: String, newCount: Int, targetPost: Int) {
         val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         

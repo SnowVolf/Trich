@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "My Application"
 
-include(":app")
+include(":app", ":ui-kit", ":data", ":navigation", ":feature:boards", ":feature:thread", ":feature:drafts", ":feature:history", ":feature:settings", ":feature:favorites", ":feature:gallery", ":feature:threadlist", ":feature:new-thread")

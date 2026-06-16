@@ -17,7 +17,7 @@ fun Modifier.liquidGlassEffect(
     shape: androidx.compose.ui.graphics.Shape = androidx.compose.ui.graphics.RectangleShape,
     thickness: Float = 8f,
     intensity: Float = 10f,
-    index: Float = 1.5f
+    index: Float = 1.5f,
 ): Modifier = composed {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         val context = LocalContext.current
@@ -69,13 +69,20 @@ fun Modifier.liquidGlassEffect(
                 runtimeShader.setFloatUniform("resolution", resolutionX, resolutionY)
                 runtimeShader.setFloatUniform("center", centerX, centerY)
                 runtimeShader.setFloatUniform("size", sizeX, sizeY)
-                runtimeShader.setFloatUniform("radius", radiusRightBottom, radiusRightTop, radiusLeftBottom, radiusLeftTop)
+                runtimeShader.setFloatUniform(
+                    "radius",
+                    radiusRightBottom,
+                    radiusRightTop,
+                    radiusLeftBottom,
+                    radiusLeftTop
+                )
                 runtimeShader.setFloatUniform("thickness", thickness * density.density)
                 runtimeShader.setFloatUniform("refract_intensity", intensity * density.density)
                 runtimeShader.setFloatUniform("refract_index", index)
                 runtimeShader.setFloatUniform("foreground_color_premultiplied", r, g, b, a)
 
-                renderEffect = RenderEffect.createRuntimeShaderEffect(runtimeShader, "img").asComposeRenderEffect()
+                renderEffect = RenderEffect.createRuntimeShaderEffect(runtimeShader, "img")
+                    .asComposeRenderEffect()
             }
         } else {
             this

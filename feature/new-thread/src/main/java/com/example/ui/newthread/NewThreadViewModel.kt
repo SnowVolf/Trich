@@ -1,19 +1,18 @@
-package com.example.ui.newthread
+package ru.svolf.trich.ui.newthread
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.repository.DvachRepository
-import com.example.ui.newthread.model.NewThreadState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-
-import android.content.Context
-import android.net.Uri
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import ru.svolf.trich.repository.DvachRepository
+import ru.svolf.trich.ui.newthread.model.NewThreadState
 import java.io.File
 import java.io.FileOutputStream
 

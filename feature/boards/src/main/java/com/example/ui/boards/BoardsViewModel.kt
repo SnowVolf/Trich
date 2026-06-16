@@ -1,13 +1,13 @@
-package com.example.ui.boards
+package ru.svolf.trich.ui.boards
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ui.boards.model.BoardsState
-import com.example.repository.DvachRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ru.svolf.trich.repository.DvachRepository
+import ru.svolf.trich.ui.boards.model.BoardsState
 
 /**
  * ViewModel для управления состоянием экрана списка досок.

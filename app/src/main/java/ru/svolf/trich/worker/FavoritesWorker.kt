@@ -1,4 +1,4 @@
-package com.example.worker
+package ru.svolf.trich.worker
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,11 +10,10 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.MainActivity
-import com.example.R
-import com.example.repository.DvachRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import ru.svolf.trich.MainActivity
+import ru.svolf.trich.repository.DvachRepository
 
 class FavoritesWorker(
     appContext: Context,

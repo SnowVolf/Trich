@@ -1,8 +1,7 @@
-package com.example.ui.favorites
+package ru.svolf.trich.ui.favorites
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,21 +22,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.uikit.R
-import com.example.db.FavoriteThread
-import com.example.uikit.components.AnimatedAppearance
-import com.example.uikit.components.FloatingToolbar
-import com.example.uikit.components.FloatingButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import org.koin.androidx.compose.koinViewModel
+import ru.svolf.trich.db.FavoriteThread
+import ru.svolf.trich.uikit.R
+import ru.svolf.trich.uikit.components.AnimatedAppearance
+import ru.svolf.trich.uikit.components.FloatingButton
+import ru.svolf.trich.uikit.components.FloatingToolbar
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

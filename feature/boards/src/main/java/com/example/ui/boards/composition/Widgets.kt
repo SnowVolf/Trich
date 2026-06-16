@@ -1,4 +1,4 @@
-package com.example.ui.boards.composition
+package ru.svolf.trich.ui.boards.composition
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.Board
+import  ru.svolf.trich.domain.model.Board
 
 @Composable
 fun BoardItem(board: Board, onClick: () -> Unit) {

@@ -1,4 +1,4 @@
-package com.example.ui.settings.composition
+package ru.svolf.trich.ui.settings.composition
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

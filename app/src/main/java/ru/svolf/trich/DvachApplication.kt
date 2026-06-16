@@ -1,26 +1,25 @@
-package com.example
+package ru.svolf.trich
 
 import android.app.Application
+import android.os.Build
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
-import coil.decode.VideoFrameDecoder
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
-import android.os.Build
-import com.example.data.di.dataModule
-import com.example.di.appModule
-import com.example.ui.boards.di.boardsModule
-import com.example.ui.drafts.di.draftsModule
-import com.example.ui.favorites.di.favoritesModule
-import com.example.ui.history.di.historyModule
-import com.example.ui.settings.di.settingsModule
-import com.example.ui.thread.di.threadModule
-import com.example.ui.threadlist.di.threadListModule
-import com.example.ui.newthread.di.newThreadModule
+import coil.decode.VideoFrameDecoder
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import ru.svolf.trich.data.di.dataModule
+import ru.svolf.trich.ui.boards.di.boardsModule
+import ru.svolf.trich.ui.drafts.di.draftsModule
+import ru.svolf.trich.ui.favorites.di.favoritesModule
+import ru.svolf.trich.ui.history.di.historyModule
+import ru.svolf.trich.ui.newthread.di.newThreadModule
+import ru.svolf.trich.ui.settings.di.settingsModule
+import ru.svolf.trich.ui.thread.di.threadModule
+import ru.svolf.trich.ui.threadlist.di.threadListModule
 
 /**
  * Главный класс приложения. Инициализирует DI (Koin) и настраивает кеширование Coil.
@@ -32,7 +31,6 @@ class DvachApplication : Application(), ImageLoaderFactory {
             androidContext(this@DvachApplication)
             modules(
                 dataModule,
-                appModule,
                 settingsModule,
                 boardsModule,
                 historyModule,

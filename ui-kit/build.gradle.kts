@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.uikit"
+    namespace = "ru.svolf.trich.uikit"
     compileSdk { version = release(36) { minorApiLevel = 1 } }
 
     defaultConfig {

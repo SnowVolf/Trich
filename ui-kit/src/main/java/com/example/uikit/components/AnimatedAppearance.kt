@@ -1,4 +1,4 @@
-package com.example.uikit.components
+package ru.svolf.trich.uikit.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState

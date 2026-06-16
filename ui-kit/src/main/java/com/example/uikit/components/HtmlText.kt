@@ -1,4 +1,4 @@
-package com.example.uikit.components
+package ru.svolf.trich.uikit.components
 
 import android.widget.TextView
 import androidx.compose.foundation.layout.fillMaxWidth

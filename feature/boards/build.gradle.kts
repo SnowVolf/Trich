@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.feature.boards"
+    namespace = "ru.svolf.trich.feature.boards"
     compileSdk { version = release(36) { minorApiLevel = 1 } }
 
     defaultConfig {

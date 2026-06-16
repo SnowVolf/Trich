@@ -1,4 +1,4 @@
-package com.example.ui.newthread.model
+package ru.svolf.trich.ui.newthread.model
 
 data class NewThreadState(
     val subject: String = "",

@@ -1,4 +1,4 @@
-package com.example.ui.settings
+package ru.svolf.trich.ui.settings
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -17,15 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import com.example.ui.settings.composition.SettingsSwitch
-import com.example.uikit.components.FloatingToolbar
-import org.koin.androidx.compose.koinViewModel
-
 import androidx.compose.ui.res.stringResource
-import com.example.uikit.R
+import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.koinViewModel
+import ru.svolf.trich.ui.settings.composition.SettingsSwitch
+import ru.svolf.trich.uikit.R
+import ru.svolf.trich.uikit.components.FloatingToolbar
 
 @Composable
 fun SettingsScreen(

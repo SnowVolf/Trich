@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.navigation"
+    namespace = "ru.svolf.trich.navigation"
     compileSdk { version = release(36) { minorApiLevel = 1 } }
 
     defaultConfig {

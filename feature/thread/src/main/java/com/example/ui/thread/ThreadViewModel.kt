@@ -1,21 +1,20 @@
-package com.example.ui.thread
+package ru.svolf.trich.ui.thread
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.model.PostInfo
-import com.example.repository.DvachRepository
-import com.example.ui.thread.model.CaptchaState
-import com.example.ui.thread.model.ThreadState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import com.example.ui.settings.model.SettingsRepository
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import ru.svolf.trich.repository.DvachRepository
+import ru.svolf.trich.ui.settings.model.SettingsRepository
+import ru.svolf.trich.ui.thread.model.CaptchaState
+import ru.svolf.trich.ui.thread.model.ThreadState
 
 /**
  * ViewModel для управления экраном конкретного треда (просмотр постов, ответы, капча).

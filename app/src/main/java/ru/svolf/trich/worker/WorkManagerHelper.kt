@@ -1,4 +1,4 @@
-package com.example.worker
+package ru.svolf.trich.worker
 
 import android.content.Context
 import androidx.work.Constraints

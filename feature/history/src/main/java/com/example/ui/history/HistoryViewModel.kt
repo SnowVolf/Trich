@@ -1,14 +1,13 @@
-package com.example.ui.history
+package ru.svolf.trich.ui.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.db.VisitedThread
-import com.example.repository.DvachRepository
-import com.example.ui.history.model.HistoryState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ru.svolf.trich.repository.DvachRepository
+import ru.svolf.trich.ui.history.model.HistoryState
 
 /**
  * ViewModel для управления экраном истории посещенных тредов.

@@ -1,13 +1,13 @@
-package com.example.ui.drafts
+package ru.svolf.trich.ui.drafts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.repository.DvachRepository
-import com.example.ui.drafts.model.DraftsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ru.svolf.trich.repository.DvachRepository
+import ru.svolf.trich.ui.drafts.model.DraftsState
 
 /**
  * ViewModel для управления экраном черновиков пользователя.

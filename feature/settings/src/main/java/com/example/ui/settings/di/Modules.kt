@@ -1,8 +1,8 @@
-package com.example.ui.settings.di
+package ru.svolf.trich.ui.settings.di
 
-import com.example.ui.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import ru.svolf.trich.ui.settings.SettingsViewModel
 
 val settingsModule = module {
     viewModel { SettingsViewModel(get()) }

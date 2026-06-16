@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.feature.drafts"
+    namespace = "ru.svolf.trich.feature.drafts"
     compileSdk { version = release(36) { minorApiLevel = 1 } }
 
     defaultConfig {

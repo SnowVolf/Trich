@@ -1,6 +1,6 @@
-package com.example.ui.threadlist.model
+package ru.svolf.trich.ui.threadlist.model
 
-import com.example.domain.model.ThreadSummary
+import  ru.svolf.trich.domain.model.ThreadSummary
 
 data class ThreadListState(
     val isLoading: Boolean = false,

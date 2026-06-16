@@ -1,4 +1,4 @@
-package com.example.ui.drafts.composition
+package ru.svolf.trich.ui.drafts.composition
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -15,8 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.db.Draft
-import java.util.Date
+import ru.svolf.trich.db.Draft
 import java.text.SimpleDateFormat
 import java.util.Locale
 

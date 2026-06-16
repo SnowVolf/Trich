@@ -1,6 +1,6 @@
-package com.example.ui.history.model
+package ru.svolf.trich.ui.history.model
 
-import com.example.db.VisitedThread
+import  ru.svolf.trich.db.VisitedThread
 
 data class HistoryState(
     val isLoading: Boolean = false,

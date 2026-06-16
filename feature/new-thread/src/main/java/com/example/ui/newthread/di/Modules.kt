@@ -1,9 +1,9 @@
-package com.example.ui.newthread.di
+package ru.svolf.trich.ui.newthread.di
 
-import com.example.ui.newthread.NewThreadViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import ru.svolf.trich.ui.newthread.NewThreadViewModel
 
 val newThreadModule = module {
     viewModel { NewThreadViewModel(get(), androidContext()) }

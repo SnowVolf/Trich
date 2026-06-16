@@ -1,16 +1,16 @@
-package com.example.ui.threadlist
+package ru.svolf.trich.ui.threadlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ui.threadlist.model.ThreadListState
-import com.example.repository.DvachRepository
-import com.example.ui.settings.model.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.svolf.trich.repository.DvachRepository
+import ru.svolf.trich.ui.settings.model.SettingsRepository
+import ru.svolf.trich.ui.threadlist.model.ThreadListState
 
 /**
  * ViewModel для управления экраном каталога тредов выбранной доски.

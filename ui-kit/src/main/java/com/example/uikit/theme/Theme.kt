@@ -1,4 +1,4 @@
-package com.example.uikit.theme
+package ru.svolf.trich.uikit.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

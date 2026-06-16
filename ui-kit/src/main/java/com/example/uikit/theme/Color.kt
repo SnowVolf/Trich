@@ -1,4 +1,4 @@
-package com.example.uikit.theme
+package ru.svolf.trich.uikit.theme
 
 import androidx.compose.ui.graphics.Color
 

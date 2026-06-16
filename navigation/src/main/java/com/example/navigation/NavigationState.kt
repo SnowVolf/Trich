@@ -1,4 +1,4 @@
-package com.example.navigation
+package ru.svolf.trich.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState

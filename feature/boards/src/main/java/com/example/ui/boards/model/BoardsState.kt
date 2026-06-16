@@ -1,6 +1,6 @@
-package com.example.ui.boards.model
+package ru.svolf.trich.ui.boards.model
 
-import com.example.domain.model.Board
+import  ru.svolf.trich.domain.model.Board
 
 data class BoardsState(
     val isLoading: Boolean = false,

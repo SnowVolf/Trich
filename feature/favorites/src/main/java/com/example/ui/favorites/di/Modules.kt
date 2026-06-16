@@ -1,8 +1,8 @@
-package com.example.ui.favorites.di
+package ru.svolf.trich.ui.favorites.di
 
-import com.example.ui.favorites.FavoritesViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import ru.svolf.trich.ui.favorites.FavoritesViewModel
 
 val favoritesModule = module {
     viewModel { FavoritesViewModel(get()) }

@@ -1,36 +1,32 @@
-package com.example.ui.newthread
+package ru.svolf.trich.ui.newthread
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.background
 import coil.compose.AsyncImage
-import com.example.uikit.R
-import com.example.uikit.components.FloatingToolbar
 import org.koin.androidx.compose.koinViewModel
-import com.example.uikit.components.EmojiCaptchaDialog
+import ru.svolf.trich.uikit.components.EmojiCaptchaDialog
+import ru.svolf.trich.uikit.components.FloatingToolbar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

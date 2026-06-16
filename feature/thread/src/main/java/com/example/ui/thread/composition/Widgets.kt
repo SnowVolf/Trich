@@ -1,5 +1,6 @@
-package com.example.ui.thread.composition
+package ru.svolf.trich.ui.thread.composition
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,15 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.clickable
-import androidx.compose.ui.unit.dp
-import com.example.domain.model.Post
-import com.example.uikit.components.HtmlText
-import com.example.uikit.components.VideoPlayer
-import com.example.uikit.components.AttachmentImage
-
 import androidx.compose.ui.res.stringResource
-import com.example.uikit.R
+import androidx.compose.ui.unit.dp
+import ru.svolf.trich.domain.model.Post
+import ru.svolf.trich.uikit.R
+import ru.svolf.trich.uikit.components.AttachmentImage
+import ru.svolf.trich.uikit.components.HtmlText
+import ru.svolf.trich.uikit.components.VideoPlayer
 
 @Composable
 fun PostCard(

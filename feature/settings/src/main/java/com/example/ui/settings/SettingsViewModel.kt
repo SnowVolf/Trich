@@ -1,13 +1,13 @@
-package com.example.ui.settings
+package ru.svolf.trich.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ui.settings.model.SettingsRepository
-import com.example.ui.settings.model.SettingsState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.svolf.trich.ui.settings.model.SettingsRepository
+import ru.svolf.trich.ui.settings.model.SettingsState
 
 /**
  * ViewModel для управления экраном настроек приложения (выбор темы, размер шрифта, пароль).

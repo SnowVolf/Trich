@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.feature.newthread"
+    namespace = "ru.svolf.trich.feature.newthread"
     compileSdk { version = release(36) { minorApiLevel = 1 } }
 
     defaultConfig {

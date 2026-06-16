@@ -1,4 +1,4 @@
-package com.example.ui.history.composition
+package ru.svolf.trich.ui.history.composition
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.db.VisitedThread
+import  ru.svolf.trich.db.VisitedThread
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

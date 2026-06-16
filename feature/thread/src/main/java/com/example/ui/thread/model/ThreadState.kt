@@ -1,6 +1,6 @@
-package com.example.ui.thread.model
+package ru.svolf.trich.ui.thread.model
 
-import com.example.domain.model.Post
+import  ru.svolf.trich.domain.model.Post
 
 sealed class CaptchaState {
     object Hidden : CaptchaState()

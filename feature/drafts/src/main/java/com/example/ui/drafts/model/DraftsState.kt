@@ -1,6 +1,6 @@
-package com.example.ui.drafts.model
+package ru.svolf.trich.ui.drafts.model
 
-import com.example.db.Draft
+import  ru.svolf.trich.db.Draft
 
 data class DraftsState(
     val isLoading: Boolean = false,

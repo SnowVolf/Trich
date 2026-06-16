@@ -1,6 +1,6 @@
-package com.example.ui.favorites.model
+package ru.svolf.trich.ui.favorites.model
 
-import com.example.db.FavoriteThread
+import  ru.svolf.trich.db.FavoriteThread
 
 data class FavoritesState(
     val favorites: List<FavoriteThread> = emptyList(),

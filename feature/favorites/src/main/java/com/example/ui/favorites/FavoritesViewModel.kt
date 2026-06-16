@@ -1,13 +1,13 @@
-package com.example.ui.favorites
+package ru.svolf.trich.ui.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.repository.DvachRepository
-import com.example.ui.favorites.model.FavoritesState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ru.svolf.trich.repository.DvachRepository
+import ru.svolf.trich.ui.favorites.model.FavoritesState
 
 /**
  * ViewModel для управления экраном избранных тредов пользователя.
